@@ -9,10 +9,9 @@ Full-stack social media web application.
 - Manual sign-in function and Google sign-in function using Google OAuth
 - Like, dislike, edit, and delete posts
 
+<img width="895" alt="image" src="https://github.com/M-Aaliyah/chat-app/assets/115180358/a56f8db8-ad23-497d-aa0d-fdf2c5844451">
 
-<img width="893" alt="image" src="https://github.com/M-Aaliyah/chat-app/assets/115180358/8d47efc0-5557-4b87-a10a-c865998abee2">
-
-<img width="410" alt="image" src="https://github.com/M-Aaliyah/chat-app/assets/115180358/9f982967-763f-45cb-84a2-2669a29f6679">
+<img width="521" alt="image" src="https://github.com/M-Aaliyah/chat-app/assets/115180358/2df62b74-2f9b-44db-99b5-1d994ede541d">
 
 ## Setup
 - Run npm i and npm start for both the client and server to start the app.
