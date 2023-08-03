@@ -1,6 +1,7 @@
 # Chat Application
 
 ## About
+Full-stack social media web application. 
 
 ### Key Features
 - Main posts page with create post form (creator, title, description, image, tags)
