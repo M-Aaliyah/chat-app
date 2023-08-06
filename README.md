@@ -11,7 +11,7 @@ Full-stack social media web application.
 
 <img width="895" alt="image" src="https://github.com/M-Aaliyah/chat-app/assets/115180358/a56f8db8-ad23-497d-aa0d-fdf2c5844451">
 
-<img width="420" alt="image" src="https://github.com/M-Aaliyah/chat-app/assets/115180358/2df62b74-2f9b-44db-99b5-1d994ede541d">
+<img width="420" alt="image" src="https://github.com/M-Aaliyah/chat-app/assets/115180358/7e28e77a-c9c3-401d-9645-d05a3218da91">
 
 ## Setup
 - Run npm i and npm start for both the client and server to start the app.
