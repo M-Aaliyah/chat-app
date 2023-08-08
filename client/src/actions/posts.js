@@ -29,6 +29,7 @@ export const createPost = (post) => async (dispatch) => {
         dispatch({ type: START_LOADING });
         const { data }  = await api.createPost(post); // Post api request to server to send a post
         dispatch({ type: CREATE, payload: data });
+        dispatch({ type: END_LOADING });
     } catch (error) {
         console.log(error);
     }
