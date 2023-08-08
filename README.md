@@ -19,3 +19,7 @@ Full-stack social media web application.
 
 ## Setup
 - Run npm i and npm start for both the client and server to start the app.
+
+## To Do
+- Add commenting feature
+- Post recommendations
