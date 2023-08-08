@@ -4,28 +4,49 @@ import mongoose from 'mongoose';
 
 import PostMessage from '../models/postMessage.js';
 
+const router = express.Router();
 
 export const getPosts = async (req, res) => {
-    try {
-        const postMessages = await PostMessage.find();
+    const { page } = req.query;
 
-        res.status(200).json(postMessages);
+    try {
+        const LIMIT = 8; // Number of posts per page
+        const startIndex = (Number(page) - 1) * LIMIT; // Starting index of the first post on the new page
+        const total = await PostMessage.countDocuments({}); // Get the total number of pages 
+        
+        const posts = await PostMessage.find().sort({ _id: -1 }).limit(LIMIT).skip(startIndex); // Get LIMIT posts from the oldest to the newest and skip to new startIndex
+
+        res.status(200).json({ data: posts, currentPage: Number(page), numberofPages: Math.ceil(total/LIMIT) });
     } catch (error) {
-        res.status(404).json({message: error.message});
+        res.status(404).json({ message: error.message });
     }
 }
+
+export const getPostsBySearch = async (req, res) => {
+    const { searchQuery, tags } = req.query;
+
+    try { 
+        const title = new RegExp(searchQuery, 'i');
+
+        const posts = await PostMessage.find({ $or: [ { title }, { tags: { $in: tags.split(',') } }]}); // Find posts by title or tags entered by the user
+
+        res.json({ data: posts });
+    } catch (error) {
+        res.status(404).json({ message: error.message });
+    }
+};
 
 export const createPost = async (req, res) => {
     const post = req.body;
 
-    const newPost = new PostMessage(post);
+    const newPostMessage = new PostMessage({ ...post, creator: req.userId, createdAt: new Date().toISOString() });
 
-    try {
-        await newPost.save();
+    try {  
+        await newPostMessage.save();
 
-        res.status(201).json(newPost);
+        res.status(201).json(newPostMessage);
     } catch (error) {
-        res.status(409).json({message: error.message});
+        res.status(409).json({ message: error.message });
     }
 }
 
@@ -41,22 +62,33 @@ export const updatePost = async (req, res) => {
 }
 
 export const deletePost = async (req, res) => {
-    const { id: _id } = req.params;
+    const { id } = req.params;
 
-    if (!mongoose.Types.ObjectId.isValid(_id)) return res.status(404).send('No post with that id');
+    if (!mongoose.Types.ObjectId.isValid(id)) return res.status(404).send('No post with that id');
 
-    await PostMessage.findByIdAndRemove(_id);
-
+    await PostMessage.findByIdAndRemove(id);
     res.json({ message: 'Post deleted successfully' });
 }
 
 export const likePost = async (req, res) => {
-    const { id: _id } = req.params;
+    const { id } = req.params;
+    console.log(req.userId);
+    if (!req.userId) return res.json({ message: "Unauthenticated." });
 
-    if (!mongoose.Types.ObjectId.isValid(_id)) return res.status(404).send('No post with that id');
+    if (!mongoose.Types.ObjectId.isValid(id)) return res.status(404).send('No post with that id');
 
-    const post = await PostMessage.findById(_id);
-    const updatedPost = await PostMessage.findByIdAndUpdate(_id, { likeCount: post.likeCount + 1}, { new: true });
+    const post = await PostMessage.findById(id);
+
+    const index = post.likes.findIndex((id) => id === String(req.userId));
+    if (index === -1) { // Like the post if not already liked
+        post.likes.push(req.userId);
+    } else { // Dislike post if already liked
+        post.likes = post.likes.filter((id) => id !== String(req.userId));
+    }
+
+    const updatedPost = await PostMessage.findByIdAndUpdate(id, post, { new: true });
 
     res.json(updatedPost);
 }
+
+export default router;

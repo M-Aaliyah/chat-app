@@ -3,7 +3,6 @@ import ReactDOM from 'react-dom';
 
 import { Provider } from 'react-redux';
 import { applyMiddleware, compose, legacy_createStore } from 'redux';
-//import { configureStore } from '@reduxjs/toolkit';
 import thunk from 'redux-thunk';
 
 import reducers from './reducers';
@@ -11,7 +10,7 @@ import reducers from './reducers';
 import App from './App';
 import './index.css';
 
-const store = legacy_createStore(reducers, compose(applyMiddleware(thunk)));
+const store = legacy_createStore(reducers, {}, compose(applyMiddleware(thunk)));
 
 ReactDOM.render(
     <Provider store={store}>
